@@ -1,0 +1,55 @@
+{
+    "presets": {
+      "draw-center": {
+        "name": "Draw From Center",
+        "description": "Lines expand from middle",
+        "css": "#${id} {\n  position: relative;\n  border: ${border-width}px ${border-style} transparent;\n}\n\n#${id}::before,\n#${id}::after {\n  content: '';\n  position: absolute;\n  left: 50%;\n  width: 0;\n  height: ${border-width}px;\n  background: ${border-color};\n  transition: all ${animation-duration}s ${easing-function};\n}\n\n#${id}::before { top: 0; }\n#${id}::after { bottom: 0; }\n\n${hover-prefix}::before,\n${hover-prefix}::after {\n  width: 100%;\n  left: 0;\n  transform: translateX(0);\n}\n\n${hover-prefix} {\n  border-color: ${border-color};\n}"
+      },
+      "sequential": {
+        "name": "Sequential Borders",
+        "description": "Top → Right → Bottom → Left",
+        "css": "#${id} {\n  position: relative;\n  border: ${border-width}px ${border-style} transparent;\n}\n\n#${id}::before,\n#${id}::after,\n#${id} .border-left,\n#${id} .border-right {\n  content: '';\n  position: absolute;\n  background: ${border-color};\n  transition: all ${animation-duration}s ${easing-function};\n}\n\n/* Top */\n#${id}::before {\n  top: 0;\n  left: 0;\n  width: 0;\n  height: ${border-width}px;\n}\n\n/* Right */\n#${id} .border-right {\n  top: 0;\n  right: 0;\n  width: ${border-width}px;\n  height: 0;\n  transition-delay: ${animation-delay}s;\n}\n\n/* Bottom */\n#${id}::after {\n  bottom: 0;\n  right: 0;\n  width: 0;\n  height: ${border-width}px;\n  transition-delay: ${animation-delay * 2}s;\n}\n\n/* Left */\n#${id} .border-left {\n  bottom: 0;\n  left: 0;\n  width: ${border-width}px;\n  height: 0;\n  transition-delay: ${animation-delay * 3}s;\n}\n\n${hover-prefix}::before { width: 100%; }\n${hover-prefix} .border-right { height: 100%; }\n${hover-prefix}::after { width: 100%; }\n${hover-prefix} .border-left { height: 100%; }\n\n${hover-prefix} {\n  border-color: ${border-color};\n}"
+      },
+      "scissor": {
+        "name": "Scissor Effect",
+        "description": "Diagonal lines meeting",
+        "css": "#${id} {\n  position: relative;\n  border: ${border-width}px ${border-style} transparent;\n  overflow: hidden;\n}\n\n#${id}::before,\n#${id}::after {\n  content: '';\n  position: absolute;\n  left: 0;\n  top: 50%;\n  width: 0;\n  height: ${border-width}px;\n  background: ${border-color};\n  transform-origin: left center;\n  transition: all ${animation-duration}s ${easing-function};\n}\n\n#${id}::before { transform: rotate(-45deg); }\n#${id}::after { transform: rotate(45deg); }\n\n${hover-prefix}::before,\n${hover-prefix}::after {\n  width: 100%;\n  transform: rotate(0);\n}\n\n${hover-prefix} {\n  border-color: ${border-color};\n}"
+      },
+      "fade": {
+        "name": "Fade-In Borders",
+        "description": "Gradual opacity fill",
+        "css": "#${id} {\n  position: relative;\n  border: ${border-width}px ${border-style} transparent;\n}\n\n#${id}::before {\n  content: '';\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  border: ${border-width}px ${border-style} transparent;\n  border-radius: ${border-radius}px;\n  transition: all ${animation-duration}s ${easing-function};\n}\n\n${hover-prefix}::before {\n  border-color: ${border-color};\n}"
+      },
+      "pulse": {
+        "name": "Pulse/Glow",
+        "description": "Animated shadow",
+        "css": "#${id} {\n  border: ${border-width}px ${border-style} ${border-color};\n  animation: none;\n}\n\n${hover-prefix} {\n  animation: pulse ${animation-duration}s ${easing-function} infinite;\n}\n\n@keyframes pulse {\n  0% { box-shadow: 0 0 0 0 ${border-color}80; }\n  70% { box-shadow: 0 0 0 10px ${border-color}00; }\n  100% { box-shadow: 0 0 0 0 ${border-color}00; }\n}"
+      }
+    },
+    "directions": {
+      "clockwise": {
+        "sequential": {
+          "order": ["top", "right", "bottom", "left"],
+          "delays": [0, "${animation-delay}", "${animation-delay * 2}", "${animation-delay * 3}"]
+        }
+      },
+      "counter-clockwise": {
+        "sequential": {
+          "order": ["top", "left", "bottom", "right"],
+          "delays": [0, "${animation-delay}", "${animation-delay * 2}", "${animation-delay * 3}"]
+        }
+      },
+      "inward": {
+        "scissor": {
+          "transform-start": "rotate(0)",
+          "transform-end": "rotate(45deg)"
+        }
+      },
+      "outward": {
+        "scissor": {
+          "transform-start": "rotate(45deg)",
+          "transform-end": "rotate(0)"
+        }
+      }
+    }
+  }
